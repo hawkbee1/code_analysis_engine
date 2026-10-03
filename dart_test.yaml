@@ -1,0 +1,7 @@
+tags:
+  # Analyzes the real flutter_scene submodule (~600 files). Runs by default;
+  # exclude it with exclude_tags "slow" for a quick loop.
+  slow:
+    timeout: 2m
+  # Keeps a file out of Very Good CLI's test merging (which drops tags).
+  skip_very_good_optimization:

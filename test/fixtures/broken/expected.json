@@ -1,0 +1,10 @@
+{
+  "entry": "lib/ok.dart#Ok",
+  "stats": {"files": 2, "parseErrors": 1, "nodes": 1},
+  "nodes": [
+    ["lib/ok.dart#Ok", "classDecl", null]
+  ],
+  "loc": {
+    "lib/ok.dart#Ok": 1
+  }
+}

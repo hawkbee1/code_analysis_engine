@@ -1,0 +1,29 @@
+=== pubspec.yaml
+name: app
+=== lib/app.dart
+export 'src/models.dart' show User;
+export 'src/repository.dart' hide InternalThing;
+export 'src/more.dart';
+=== lib/src/models.dart
+class User {}
+
+class Hidden {}
+=== lib/src/repository.dart
+class UserRepository {}
+
+class InternalThing {}
+=== lib/src/more.dart
+export 'deeper.dart';
+=== lib/src/deeper.dart
+export 'more.dart';
+
+class Deep {}
+=== lib/feature.dart
+import 'package:app/app.dart';
+import 'package:app/app.dart' as app;
+
+class Admin extends User {}
+
+class CachedRepository extends app.UserRepository {}
+
+class DeepUser extends Deep {}

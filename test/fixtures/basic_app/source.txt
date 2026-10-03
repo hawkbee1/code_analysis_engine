@@ -1,0 +1,38 @@
+=== pubspec.yaml
+name: basic_app
+=== lib/main.dart
+import 'package:basic_app/src/counter.dart';
+
+void main() {
+  final counter = Counter(2);
+  counter.increment();
+}
+=== lib/src/counter.dart
+/// A counter.
+class Counter {
+  Counter(this.value);
+
+  Counter.zero() : value = 0;
+
+  int value;
+
+  int get doubled => value * 2;
+
+  set doubled(int v) => value = v ~/ 2;
+
+  void increment() {
+    // Adds one.
+    value++;
+  }
+
+  static Counter max(Counter a, Counter b) => a.value > b.value ? a : b;
+}
+
+class Display {
+  const Display();
+
+  /* Shows the counter. */
+  String show(Counter c) => '${c.value}';
+}
+=== README.md
+Not Dart: never analyzed.

@@ -1,0 +1,7 @@
+=== pubspec.yaml
+name: broken_app
+=== lib/ok.dart
+class Ok {}
+=== lib/broken.dart
+class Broken {
+  void unfinished(

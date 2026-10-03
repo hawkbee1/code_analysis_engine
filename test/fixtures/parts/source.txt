@@ -1,0 +1,29 @@
+=== pubspec.yaml
+name: parts_app
+=== lib/library.dart
+part 'src/a.dart';
+part 'src/b.dart';
+
+class Base {}
+=== lib/src/a.dart
+part of '../library.dart';
+
+class A extends Base {}
+=== lib/src/b.dart
+part of '../library.dart';
+
+class B extends A {}
+=== lib/named.dart
+library my.named;
+
+part 'named_part.dart';
+
+class N {}
+=== lib/named_part.dart
+part of my.named;
+
+class NP extends N {}
+=== lib/orphan.dart
+part of 'missing.dart';
+
+class Orphan {}

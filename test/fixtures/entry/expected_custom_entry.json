@@ -1,0 +1,17 @@
+{
+  "rules": {"entry.point":"bin/tool.dart"},
+  "entry": "bin/tool.dart#main",
+  "stats": {"files": 4, "parseErrors": 0, "nodes": 4},
+  "nodes": [
+    ["bin/tool.dart#main", "function", null],
+    ["lib/main_development.dart#main", "function", null],
+    ["lib/main_staging.dart#main", "function", null],
+    ["lib/other.dart#main", "function", null]
+  ],
+  "loc": {
+    "bin/tool.dart#main": 1,
+    "lib/main_development.dart#main": 1,
+    "lib/main_staging.dart#main": 1,
+    "lib/other.dart#main": 1
+  }
+}

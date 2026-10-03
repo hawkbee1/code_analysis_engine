@@ -1,0 +1,40 @@
+=== lib/kinds.dart
+enum Color {
+  red;
+
+  void paint() {}
+}
+
+extension on String {
+  int get twice => length * 2;
+}
+
+extension Named on int {
+  void hello() {}
+}
+
+extension type Meters(double value) {
+  Meters.zero() : this(0);
+}
+
+mixin Walker on Object {
+  void walk() {}
+}
+
+int get topGetter => 1;
+
+set topSetter(int value) {}
+
+typedef Callback = void Function();
+
+var counter = 0;
+
+class Point(final int x, final int y) {
+  int get sum => x + y;
+}
+
+class Modern {
+  const new();
+  new named();
+  int operator +(Modern other) => 0;
+}

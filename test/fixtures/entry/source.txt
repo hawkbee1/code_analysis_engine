@@ -1,0 +1,10 @@
+=== pubspec.yaml
+name: entry_app
+=== lib/main_staging.dart
+void main() {}
+=== lib/main_development.dart
+void main() {}
+=== lib/other.dart
+void main() {}
+=== bin/tool.dart
+void main() {}

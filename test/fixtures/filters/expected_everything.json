@@ -1,0 +1,37 @@
+{
+  "rules": {"files.exclude_generated":false,"files.exclude_tests":false},
+  "entry": "lib/private.dart#_Secret",
+  "stats": {"files": 8, "parseErrors": 0, "nodes": 14},
+  "nodes": [
+    ["integration_test/app_test.dart#main", "function", null],
+    ["lib/a.dart#A", "classDecl", null],
+    ["lib/a.g.dart#AGenerated", "classDecl", null],
+    ["lib/a_test.dart#ATestLike", "classDecl", null],
+    ["lib/b.freezed.dart#BFrozen", "classDecl", null],
+    ["lib/generated/z.dart#Z", "classDecl", null],
+    ["lib/private.dart#_Secret", "classDecl", null],
+    ["lib/private.dart#_Secret._hidden", "method", "lib/private.dart#_Secret"],
+    ["lib/private.dart#_Secret.shown", "method", "lib/private.dart#_Secret"],
+    ["lib/private.dart#Visible", "classDecl", null],
+    ["lib/private.dart#Visible.new", "constructor", "lib/private.dart#Visible"],
+    ["lib/private.dart#Visible._private", "method", "lib/private.dart#Visible"],
+    ["lib/private.dart#Visible.value", "getter", "lib/private.dart#Visible"],
+    ["test/a_test.dart#main", "function", null]
+  ],
+  "loc": {
+    "integration_test/app_test.dart#main": 1,
+    "lib/a.dart#A": 1,
+    "lib/a.g.dart#AGenerated": 1,
+    "lib/a_test.dart#ATestLike": 1,
+    "lib/b.freezed.dart#BFrozen": 1,
+    "lib/generated/z.dart#Z": 1,
+    "lib/private.dart#_Secret": 2,
+    "lib/private.dart#_Secret._hidden": 1,
+    "lib/private.dart#_Secret.shown": 1,
+    "lib/private.dart#Visible": 2,
+    "lib/private.dart#Visible.new": 1,
+    "lib/private.dart#Visible._private": 1,
+    "lib/private.dart#Visible.value": 1,
+    "test/a_test.dart#main": 1
+  }
+}
