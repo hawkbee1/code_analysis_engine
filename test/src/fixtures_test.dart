@@ -29,6 +29,9 @@ void main() {
 
             expect(nodeTriples(graph), expectation.nodes);
             expect(graph.project.entryNodeId, expectation.entry);
+            if (expectation.links case final links?) {
+              expect(linkTuples(graph), links);
+            }
             for (final MapEntry(key: id, value: loc)
                 in expectation.loc.entries) {
               expect(graph.nodes[id]!.loc, loc, reason: 'loc of $id');

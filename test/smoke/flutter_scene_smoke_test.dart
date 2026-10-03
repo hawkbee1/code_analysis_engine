@@ -32,9 +32,12 @@ void main() {
     print(
       'flutter_scene: ${watch.elapsedMilliseconds} ms, '
       '${graph.project.stats.toJson()}, $byKind, entry '
-      '${graph.project.entryNodeId}',
+      '${graph.project.entryNodeId}, ${last.callSites}',
     );
     expect(graph.project.stats.parseErrors, 0);
+    expect(graph.links.length, greaterThan(10000));
+    // Parse-only resolution: keep at least 40% of call sites exact.
+    expect(last.callSites.exact / last.callSites.total, greaterThan(0.4));
     expect(byKind['classDecl'], greaterThan(1000));
     expect(graph.project.entryNodeId, endsWith('lib/main.dart#main'));
     expect(watch.elapsed, lessThan(const Duration(seconds: 60)));

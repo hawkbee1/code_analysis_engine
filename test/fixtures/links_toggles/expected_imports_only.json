@@ -1,0 +1,28 @@
+{
+  "rules": {"links.imports":true,"links.implements":false,"links.mixins":false},
+  "entry": "lib/a.dart#A",
+  "stats": {"files": 2, "parseErrors": 0, "nodes": 8, "links": 2},
+  "nodes": [
+    ["lib/a.dart#A","classDecl",null],
+    ["lib/a.dart#A.run","method","lib/a.dart#A"],
+    ["lib/a.dart#M","mixinDecl",null],
+    ["lib/b.dart#I","classDecl",null],
+    ["lib/b.dart#Big","classDecl",null],
+    ["lib/b.dart#Big.m","method","lib/b.dart#Big"],
+    ["lib/b.dart#Big.n","method","lib/b.dart#Big"],
+    ["pkg:http","externalPackage",null]
+  ],
+  "links": [
+    ["lib/a.dart#A","lib/b.dart#Big","import","exact",1],
+    ["lib/a.dart#A","pkg:http","import","external",1]
+  ],
+  "loc": {
+    "lib/a.dart#A": 2,
+    "lib/a.dart#A.run": 1,
+    "lib/a.dart#M": 1,
+    "lib/b.dart#I": 1,
+    "lib/b.dart#Big": 2,
+    "lib/b.dart#Big.m": 1,
+    "lib/b.dart#Big.n": 1
+  }
+}

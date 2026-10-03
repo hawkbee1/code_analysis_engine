@@ -33,6 +33,7 @@ void main() {
         AnalysisStage.parsing,
         AnalysisStage.declarations,
         AnalysisStage.containment,
+        AnalysisStage.links,
       ]);
       expect(events.last, isA<AnalysisDone>());
     });

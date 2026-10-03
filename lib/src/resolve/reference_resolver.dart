@@ -169,9 +169,18 @@ class ResolverContext {
     (d) => d.kind != DeclKind.extensionDecl,
   );
 
-  late final Map<String, List<String>> _extensionMethodsByName = _index(
-    (d) => d.kind == DeclKind.extensionDecl,
-  );
+  late final Map<String, List<DeclarationMember>> _extensionMembers = () {
+    final index = <String, List<DeclarationMember>>{};
+    for (final library in symbols.libraries.values) {
+      for (final declaration in library.declarations.values) {
+        if (declaration.kind != DeclKind.extensionDecl) continue;
+        for (final member in declaration.members) {
+          (index[member.name] ??= []).add((declaration, member));
+        }
+      }
+    }
+    return index;
+  }();
 
   Map<String, List<String>> _index(bool Function(Declaration) where) {
     final index = <String, List<String>>{};
@@ -190,10 +199,26 @@ class ResolverContext {
   /// Node ids of the project methods named [name] (extensions excluded).
   List<String> methodsNamed(String name) => _methodsByName[name] ?? const [];
 
+  /// The project extension members named [name] whose kind is in [kinds].
+  List<DeclarationMember> extensionMembersNamed(
+    String name,
+    Set<MemberDeclKind> kinds,
+  ) => [
+    for (final found in _extensionMembers[name] ?? const <DeclarationMember>[])
+      if (kinds.contains(found.$2.kind)) found,
+  ];
+
   /// Node ids of the project extension methods named [name].
-  List<String> extensionMethodsNamed(String name) =>
-      _extensionMethodsByName[name] ?? const [];
+  List<String> extensionMethodsNamed(String name) => [
+    for (final (_, member) in extensionMembersNamed(name, const {
+      MemberDeclKind.method,
+    }))
+      ?nodeIdOfMember(member),
+  ];
 }
+
+/// A member with the type declaring it.
+typedef DeclarationMember = (Declaration, MemberDecl);
 
 /// Finds what a [ReferenceSite] refers to (architecture §5.2).
 ///

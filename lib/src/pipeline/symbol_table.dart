@@ -235,23 +235,40 @@ class SymbolTable {
 
   new _(this.libraries);
 
-  /// Package of well-known external types, used when several imported
-  /// packages could provide a name. Parse-only mode cannot know better.
+  /// Package of well-known external names, used before guessing from the
+  /// imports. dart:core is imported implicitly, so without this table its
+  /// names (`Uri`, `print`, …) would be attributed to whatever single package
+  /// a file imports. Parse-only analysis cannot know better.
   static const knownExternalTypes = {
-    'StatelessWidget': 'flutter',
-    'StatefulWidget': 'flutter',
-    'State': 'flutter',
-    'Widget': 'flutter',
-    'InheritedWidget': 'flutter',
-    'ChangeNotifier': 'flutter',
-    'CustomPainter': 'flutter',
-    'Bloc': 'bloc',
-    'Cubit': 'bloc',
-    'BlocObserver': 'bloc',
+    // dart:core
+    'Object': 'dart', 'String': 'dart', 'int': 'dart', 'double': 'dart',
+    'num': 'dart', 'bool': 'dart', 'List': 'dart', 'Map': 'dart',
+    'Set': 'dart', 'Iterable': 'dart', 'Uri': 'dart', 'DateTime': 'dart',
+    'Duration': 'dart', 'Exception': 'dart', 'Error': 'dart',
+    'StateError': 'dart', 'ArgumentError': 'dart', 'Function': 'dart',
+    'StringBuffer': 'dart', 'RegExp': 'dart', 'Comparable': 'dart',
+    'print': 'dart', 'identical': 'dart',
+    // dart:async (re-exported by dart:core for Future and Stream)
+    'Future': 'dart', 'Stream': 'dart', 'FutureOr': 'dart',
+    // flutter
+    'StatelessWidget': 'flutter', 'StatefulWidget': 'flutter',
+    'State': 'flutter', 'Widget': 'flutter', 'BuildContext': 'flutter',
+    'InheritedWidget': 'flutter', 'ChangeNotifier': 'flutter',
+    'CustomPainter': 'flutter', 'Text': 'flutter', 'Scaffold': 'flutter',
+    'MaterialApp': 'flutter', 'AppBar': 'flutter', 'Column': 'flutter',
+    'Row': 'flutter', 'Container': 'flutter', 'Padding': 'flutter',
+    'Center': 'flutter', 'SizedBox': 'flutter', 'Icon': 'flutter',
+    'Navigator': 'flutter', 'Theme': 'flutter', 'MediaQuery': 'flutter',
+    'Colors': 'flutter', 'runApp': 'flutter',
+    // bloc / flutter_bloc
+    'Bloc': 'bloc', 'Cubit': 'bloc', 'BlocObserver': 'bloc',
+    'BlocProvider': 'flutter_bloc', 'BlocBuilder': 'flutter_bloc',
+    'BlocListener': 'flutter_bloc', 'BlocConsumer': 'flutter_bloc',
+    'BlocSelector': 'flutter_bloc', 'MultiBlocProvider': 'flutter_bloc',
+    'RepositoryProvider': 'flutter_bloc',
+    'MultiRepositoryProvider': 'flutter_bloc',
+    // equatable
     'Equatable': 'equatable',
-    'Exception': 'dart',
-    'Error': 'dart',
-    'StateError': 'dart',
   };
 
   /// Every library, by path.

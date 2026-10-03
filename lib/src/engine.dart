@@ -5,6 +5,10 @@ import 'package:code_analysis_engine/src/pipeline/file_collector.dart';
 import 'package:code_analysis_engine/src/pipeline/parsed_library.dart';
 import 'package:code_analysis_engine/src/pipeline/symbol_table.dart';
 import 'package:code_analysis_engine/src/pipeline/uri_resolver.dart';
+import 'package:code_analysis_engine/src/resolve/link_builder.dart';
+import 'package:code_analysis_engine/src/resolve/reference_collector.dart';
+import 'package:code_analysis_engine/src/resolve/reference_resolver.dart';
+import 'package:code_analysis_engine/src/resolve/resolvers.dart';
 import 'package:code_analysis_engine/src/rules/analysis_rules.dart';
 import 'package:code_graph/code_graph.dart';
 import 'package:code_source_client/code_source_client.dart';
@@ -69,13 +73,16 @@ class AnalysisProgress extends AnalysisEvent {
 /// The analysis finished.
 class AnalysisDone extends AnalysisEvent {
   /// Creates the final success event.
-  const new(this.graph);
+  const new(this.graph, {this.callSites = const CallSiteStats()});
 
   /// The result.
   final CodeGraph graph;
 
+  /// How the call sites were resolved (quality of parse-only resolution).
+  final CallSiteStats callSites;
+
   @override
-  List<Object?> get props => [graph];
+  List<Object?> get props => [graph, callSites];
 }
 
 /// The analysis stopped: [error] is an [AnalysisCancelled] or a bug.
@@ -106,9 +113,13 @@ class AnalysisCancelled extends Equatable implements Exception {
 ///
 /// Pure Dart and web-compatible: it only uses the analyzer's parser.
 class CodeAnalysisEngine {
-  /// Creates an engine; [clock] dates the result (tests fix it).
-  new({DateTime Function()? clock, this.generator = defaultGenerator})
-    : _clock = clock ?? DateTime.now;
+  /// Creates an engine; [clock] dates the result (tests fix it) and
+  /// [annotators] run on the finished graph (none in the MVP).
+  new({
+    DateTime Function()? clock,
+    this.generator = defaultGenerator,
+    this.annotators = const [],
+  }) : _clock = clock ?? DateTime.now;
 
   /// Generator string written in every graph.
   static const defaultGenerator = 'dart_code_3d engine 0.1.0';
@@ -118,6 +129,9 @@ class CodeAnalysisEngine {
 
   /// Generator string written in every graph.
   final String generator;
+
+  /// Run in order on the finished graph (future design-pattern detectors).
+  final List<GraphAnnotator> annotators;
 
   final DateTime Function() _clock;
 
@@ -170,26 +184,68 @@ class CodeAnalysisEngine {
         files: files,
         rules: rules,
       );
-      const links = <CodeLink>[];
 
-      yield AnalysisDone(
-        CodeGraph(
-          project: ProjectInfo(
-            generator: generator,
-            source: snapshot.descriptor,
-            createdAt: _clock().toUtc(),
-            rules: rules.toJson(),
-            entryNodeId: containment.entryNodeId,
-            stats: GraphStats(
-              files: total,
-              parseErrors: parseErrors,
-              nodes: containment.nodes.length,
-              links: links.length,
-              durationMs: watch.elapsedMilliseconds,
-            ),
+      final links = LinkBuilder(containment.nodes);
+      final context = ResolverContext(
+        symbols: symbols,
+        nodeIdsByAst: containment.nodeIdsByAst,
+        rules: rules,
+      );
+      var skippedTopLevel = 0;
+      if (rules.linksCalls) {
+        final collector = ReferenceCollector(
+          resolver: resolverFor(rules.resolutionMode),
+          context: context,
+          sink: links.addReference,
+        );
+        for (final (index, library) in libraries.indexed) {
+          if (token.isCancelled) throw const AnalysisCancelled();
+          if (index % progressInterval == 0) {
+            yield AnalysisProgress(
+              AnalysisStage.links,
+              done: index,
+              total: libraries.length,
+              currentPath: library.path,
+            );
+          }
+          collector.collect(library);
+        }
+        skippedTopLevel = collector.skippedTopLevelSites;
+      }
+      links
+        ..addExternalSuperclasses(containment)
+        ..addTypeRelations(symbols, {
+          for (final library in symbols.libraries.values)
+            for (final declaration in library.declarations.values)
+              declaration: context.nodeIdOf(declaration),
+        }, rules);
+      if (rules.linksImports) links.addImports(libraries, symbols);
+      final linkList = links.build();
+
+      var graph = CodeGraph(
+        project: ProjectInfo(
+          generator: generator,
+          source: snapshot.descriptor,
+          createdAt: _clock().toUtc(),
+          rules: rules.toJson(),
+          entryNodeId: containment.entryNodeId,
+          stats: GraphStats(
+            files: total,
+            parseErrors: parseErrors,
+            nodes: containment.nodes.length,
+            links: linkList.length,
+            durationMs: watch.elapsedMilliseconds,
           ),
-          nodes: containment.nodes,
         ),
+        nodes: containment.nodes,
+        links: linkList,
+      );
+      for (final annotator in annotators) {
+        graph = annotator.annotate(graph);
+      }
+      yield AnalysisDone(
+        graph,
+        callSites: links.stats(skippedTopLevel: skippedTopLevel),
       );
     } on AnalysisCancelled catch (e) {
       yield AnalysisFailed(e);

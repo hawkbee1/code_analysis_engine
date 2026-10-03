@@ -57,6 +57,17 @@ class _Resolution {
 
   static const _futureTypes = {'Future', 'FutureOr'};
 
+  /// Types that say nothing about the members of a value.
+  static const _opaqueTypes = {'dynamic', 'Object', 'void', 'Never', 'Null'};
+
+  /// Members every object has: never linked by name.
+  static const _objectMembers = {
+    'toString',
+    'noSuchMethod',
+    'hashCode',
+    'runtimeType',
+  };
+
   final ReferenceSite site;
   final ResolverContext context;
 
@@ -123,7 +134,7 @@ class _Resolution {
       case ExternalSymbol(:final packageName):
         // A method inherited from an external superclass (`setState`) is
         // more likely than an imported top-level function.
-        final inherited = enclosing == null
+        final inherited = enclosing == null || _looksLikeType(name)
             ? null
             : _externalSupertypePackage(enclosing, <Declaration>{});
         return ResolvedExternal(inherited ?? packageName);
@@ -140,9 +151,10 @@ class _Resolution {
         ProjectSymbol(:final declaration)
             when _isTypeDeclaration(declaration) =>
           _constructor(declaration, 'new'),
-        ProjectSymbol() => const Unresolved('call of a variable'),
+        // The prefix exists, so the lookup is never "not found".
+        ProjectSymbol() ||
+        SymbolNotFound() => const Unresolved('call of a variable'),
         ExternalSymbol(:final packageName) => ResolvedExternal(packageName),
-        SymbolNotFound() => const Unresolved('unknown prefixed name'),
       };
 
   /// `Type.member()`: a static method or a named constructor.
@@ -187,6 +199,9 @@ class _Resolution {
 
   /// The `links.ambiguous_calls` policy for an unknown receiver type.
   ResolvedReference _byName(String name) {
+    if (_objectMembers.contains(name)) {
+      return const Unresolved('member of every object');
+    }
     final candidates = [
       ...context.methodsNamed(name),
       ...context.extensionMethodsNamed(name),
@@ -315,11 +330,28 @@ class _Resolution {
   };
 
   ResolvedReference? _getterOf(_StaticType? type, String name) {
-    if (type is! _ProjectStaticType) return null;
-    final found = _findMember(type.declaration, name, const {
+    if (type is _ProjectStaticType) {
+      final found = _findMember(type.declaration, name, const {
+        MemberDeclKind.getter,
+      });
+      if (found != null) return _toMember(found, LinkResolution.exact);
+    }
+    // e.g. `context.l10n`: a project extension getter on an external type.
+    final extension = _uniqueExtensionMember(name, const {
       MemberDeclKind.getter,
     });
-    return found == null ? null : _toMember(found, LinkResolution.exact);
+    return extension == null
+        ? null
+        : _toMember(extension, LinkResolution.byName);
+  }
+
+  /// The only project extension member named [name] of [kinds], or null.
+  DeclarationMember? _uniqueExtensionMember(
+    String name,
+    Set<MemberDeclKind> kinds,
+  ) {
+    final candidates = context.extensionMembersNamed(name, kinds);
+    return candidates.length == 1 ? candidates.single : null;
   }
 
   // ---------------------------------------------------------------- types
@@ -428,11 +460,12 @@ class _Resolution {
   }
 
   _StaticType? _typeOfMember(_StaticType? type, String name) {
-    if (type is! _ProjectStaticType) return null;
-    final found = _findMember(type.declaration, name, const {
-      MemberDeclKind.field,
-      MemberDeclKind.getter,
-    });
+    const kinds = {MemberDeclKind.field, MemberDeclKind.getter};
+    final found =
+        (type is _ProjectStaticType
+            ? _findMember(type.declaration, name, kinds)
+            : null) ??
+        _uniqueExtensionMember(name, const {MemberDeclKind.getter});
     return found == null ? null : _typeOfMemberDecl(found);
   }
 
@@ -491,16 +524,18 @@ class _Resolution {
     return found == null ? null : _typeOfMemberDecl(found);
   }
 
+  /// The declared type of a field, getter or method (never a constructor).
   _StaticType? _typeOfMemberDecl(DeclarationMember found) {
     final (owner, member) = found;
-    if (member.kind == MemberDeclKind.constructor) {
-      return _ProjectStaticType(owner, const [], owner.libraryPath);
-    }
     return _typeOfAnnotation(member.type, owner.libraryPath);
   }
 
   _StaticType? _typeOfAnnotation(TypeAnnotation? annotation, String library) {
-    if (annotation is! NamedType) return null;
+    if (annotation is! NamedType ||
+        (annotation.importPrefix == null &&
+            _opaqueTypes.contains(annotation.name.lexeme))) {
+      return null;
+    }
     final arguments = annotation.typeArguments?.arguments.toList() ?? const [];
     return switch (_symbols.lookup(
       library,
@@ -619,6 +654,3 @@ class _Resolution {
         first[0].toLowerCase() != first[0];
   }
 }
-
-/// A member with the type declaring it.
-typedef DeclarationMember = (Declaration, MemberDecl);

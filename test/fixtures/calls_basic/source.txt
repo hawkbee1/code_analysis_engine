@@ -1,0 +1,86 @@
+=== pubspec.yaml
+name: calls
+=== lib/main.dart
+import 'package:calls/src/repository.dart';
+import 'package:calls/src/util.dart' as util;
+
+Future<void> main() async {
+  final repository = UserRepository(Client());
+  repository.save('a');
+  const origin = Point.origin();
+  final point = Point(1, 2);
+  point.move(1);
+  helper();
+  util.format('x');
+  Point.parse('1,2');
+  Point.origin().move(2);
+  repository.client.send();
+  repository.current.move(3);
+  for (final user in repository.all()) {
+    user.greet();
+  }
+  (repository as UserRepository).save('b');
+  repository
+    ..save('c')
+    ..reset();
+  final fetched = await repository.fetch();
+  fetched.greet();
+  void local() {}
+  local();
+  print(origin);
+}
+
+void helper() {}
+=== lib/src/repository.dart
+class Client {
+  void send() {}
+}
+
+class User {
+  void greet() {}
+}
+
+class Point {
+  Point(this.x, this.y);
+
+  Point.origin() : this(0, 0);
+
+  final int x;
+  final int y;
+
+  static Point parse(String s) => Point(0, 0);
+
+  void move(int d) {}
+}
+
+class UserRepository {
+  UserRepository(this.client);
+
+  final Client client;
+
+  Point get current => Point.origin();
+
+  List<User> all() => [];
+
+  Future<User> fetch() async => User();
+
+  void save(String id) {
+    _log(id);
+    reset();
+  }
+
+  void reset() {}
+
+  void _log(String message) {}
+}
+
+class CachedRepository extends UserRepository {
+  CachedRepository.named(Client c) : super(c);
+
+  @override
+  void save(String id) {
+    super.save(id);
+  }
+}
+=== lib/src/util.dart
+String format(String s) => s;

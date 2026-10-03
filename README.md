@@ -53,7 +53,18 @@ await for (final event in engine.analyze(snapshot, rules, cancel: token)) {
    type's own count excludes its member spheres. Entry node: `main()` of
    `entry.point`, then a sub-package's, then `lib/main_development.dart`, then
    `lib/main_*.dart`, then any `main()` under `lib/`, then the largest top-level declaration.
-5. **Links**: session 06 (calls through a `ReferenceResolver` strategy).
+5. **Links**: every call, constructor call, `super(…)`/`this(…)` and getter read in
+   bodies and field initializers is resolved through the **`ReferenceResolver`
+   strategy** (`lib/src/resolve/`). The MVP's `DeclaredTypeResolver` infers receiver
+   types from declarations (annotations, `final a = Foo()`, `as`, `await Future<T>`,
+   return types, for-in element types, `this.field` parameters), looks members up through
+   project supertypes, falls back to unique project extension members (`context.l10n`),
+   and applies `links.ambiguous_calls` when the receiver type is unknown. Links to
+   external packages go to their sphere. `implements`, `with`, imports and
+   `extendsExternal` links follow their rules. Duplicates are merged with a `count`.
+   `AnalysisDone.callSites` reports how call sites were resolved. On flutter_scene:
+   45.7% exact, 1.0% by name, 35.4% external, 17.9% unresolved.
+6. **Annotate**: `GraphAnnotator`s run on the finished graph (none in the MVP).
 
 ## Rules
 
@@ -70,7 +81,7 @@ very_good test --coverage
 Fixtures are small projects written as one text file (`test/fixtures/<name>/source.txt`,
 sections `=== <path>`), so the package's own analysis never sees their (sometimes
 deliberately broken) code. Each `expected*.json` holds the rules and the **exact** expected
-nodes, parents, lines of code and entry node.
+nodes, parents, links, lines of code and entry node.
 `test/smoke/` analyzes the real flutter_scene submodule (tag `slow`): 622 files and 11,050
 nodes in about 1.6 s.
 

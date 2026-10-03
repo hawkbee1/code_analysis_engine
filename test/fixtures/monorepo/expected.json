@@ -1,12 +1,13 @@
 {
   "entry": "apps/shop/lib/main.dart#main",
-  "stats": {"files": 3, "parseErrors": 0, "nodes": 4},
+  "stats": {"files": 3, "parseErrors": 0, "nodes": 4, "links": 0},
   "nodes": [
-    ["apps/shop/lib/main.dart#Product", "classDecl", "packages/core/lib/src/entity.dart#Entity"],
-    ["apps/shop/lib/main.dart#main", "function", null],
-    ["packages/core/lib/src/entity.dart#Entity", "classDecl", null],
-    ["pkg:http", "externalPackage", null]
+    ["apps/shop/lib/main.dart#Product","classDecl","packages/core/lib/src/entity.dart#Entity"],
+    ["apps/shop/lib/main.dart#main","function",null],
+    ["packages/core/lib/src/entity.dart#Entity","classDecl",null],
+    ["pkg:http","externalPackage",null]
   ],
+  "links": [],
   "loc": {
     "apps/shop/lib/main.dart#Product": 1,
     "apps/shop/lib/main.dart#main": 1,

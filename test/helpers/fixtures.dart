@@ -18,6 +18,9 @@ class FixtureExpectation {
           (n! as List<Object?>).cast<String?>(),
       ],
       loc = ((json['loc'] as Map<String, Object?>?) ?? const {}).cast(),
+      links = (json['links'] as List<Object?>?)
+          ?.map((l) => (l! as List<Object?>).map((v) => '$v').toList())
+          .toList(),
       entry = json['entry'] as String?,
       stats = ((json['stats'] as Map<String, Object?>?) ?? const {}).cast();
 
@@ -29,6 +32,10 @@ class FixtureExpectation {
 
   /// Every node in order, as `[id, kind, parentId]`.
   final List<List<String?>> nodes;
+
+  /// Every link in order as `[from, to, kind, resolution, count]`, when the
+  /// file lists links (checked exactly).
+  final List<List<String>>? links;
 
   /// Expected lines of code of some nodes.
   final Map<String, int> loc;
@@ -113,6 +120,12 @@ Future<CodeGraph> analyzeOrFail(
   }
   return (last as AnalysisDone).graph;
 }
+
+/// The graph's links as `[from, to, kind, resolution, count]`.
+List<List<String>> linkTuples(CodeGraph graph) => [
+  for (final l in graph.links)
+    [l.fromId, l.toId, l.kind.name, l.resolution.name, '${l.count}'],
+];
 
 /// The graph's nodes as `[id, kind, parentId]`, the format of fixtures.
 List<List<String?>> nodeTriples(CodeGraph graph) => [

@@ -1,0 +1,16 @@
+=== lib/a.dart
+class A {
+  void save() {}
+
+  void only() {}
+}
+
+class B {
+  void save() {}
+}
+
+void run(dynamic x, y) {
+  x.save();
+  y.only();
+  x.unknown();
+}

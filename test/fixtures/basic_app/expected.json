@@ -1,18 +1,22 @@
 {
   "entry": "lib/main.dart#main",
-  "stats": {"files": 2, "parseErrors": 0, "nodes": 11},
+  "stats": {"files": 2, "parseErrors": 0, "nodes": 11, "links": 2},
   "nodes": [
-    ["lib/main.dart#main", "function", null],
-    ["lib/src/counter.dart#Counter", "classDecl", null],
-    ["lib/src/counter.dart#Counter.new", "constructor", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Counter.zero", "constructor", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Counter.doubled", "getter", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Counter.doubled=", "setter", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Counter.increment", "method", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Counter.max", "method", "lib/src/counter.dart#Counter"],
-    ["lib/src/counter.dart#Display", "classDecl", null],
-    ["lib/src/counter.dart#Display.new", "constructor", "lib/src/counter.dart#Display"],
-    ["lib/src/counter.dart#Display.show", "method", "lib/src/counter.dart#Display"]
+    ["lib/main.dart#main","function",null],
+    ["lib/src/counter.dart#Counter","classDecl",null],
+    ["lib/src/counter.dart#Counter.new","constructor","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Counter.zero","constructor","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Counter.doubled","getter","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Counter.doubled=","setter","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Counter.increment","method","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Counter.max","method","lib/src/counter.dart#Counter"],
+    ["lib/src/counter.dart#Display","classDecl",null],
+    ["lib/src/counter.dart#Display.new","constructor","lib/src/counter.dart#Display"],
+    ["lib/src/counter.dart#Display.show","method","lib/src/counter.dart#Display"]
+  ],
+  "links": [
+    ["lib/main.dart#main","lib/src/counter.dart#Counter.increment","call","exact",1],
+    ["lib/main.dart#main","lib/src/counter.dart#Counter.new","call","exact",1]
   ],
   "loc": {
     "lib/main.dart#main": 4,

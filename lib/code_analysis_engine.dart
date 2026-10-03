@@ -3,6 +3,7 @@
 library;
 
 export 'src/engine.dart';
+export 'src/resolve/link_builder.dart' show CallSiteStats, GraphAnnotator;
 export 'src/rules/analysis_rules.dart';
 export 'src/rules/rule_catalog.dart';
 export 'src/rules/rule_parameter.dart';

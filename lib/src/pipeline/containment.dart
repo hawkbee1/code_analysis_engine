@@ -198,7 +198,8 @@ Containment buildContainment({
     }
   }
 
-  final packages = <String>{};
+  // dart:core is imported implicitly: every program uses the SDK.
+  final packages = <String>{if (rules.dartSdk) 'dart'};
   for (final library in symbols.libraries.values) {
     for (final directive in [...library.imports, ...library.exports]) {
       switch (directive.target) {

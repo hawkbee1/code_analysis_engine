@@ -1,0 +1,51 @@
+{
+  "entry": "lib/user/user_repository.dart#User",
+  "stats": {"files": 3, "parseErrors": 0, "nodes": 18, "links": 10},
+  "nodes": [
+    ["lib/user/cubit/user_cubit.dart#UserCubit","classDecl","ghost:bloc:Cubit"],
+    ["lib/user/cubit/user_cubit.dart#UserCubit.new","constructor","lib/user/cubit/user_cubit.dart#UserCubit"],
+    ["lib/user/cubit/user_cubit.dart#UserCubit.load","method","lib/user/cubit/user_cubit.dart#UserCubit"],
+    ["lib/user/user_repository.dart#User","classDecl",null],
+    ["lib/user/user_repository.dart#User.new","constructor","lib/user/user_repository.dart#User"],
+    ["lib/user/user_repository.dart#UserRepository","classDecl",null],
+    ["lib/user/user_repository.dart#UserRepository.fetch","method","lib/user/user_repository.dart#UserRepository"],
+    ["lib/user/view/user_page.dart#UserPage","classDecl","ghost:flutter:StatelessWidget"],
+    ["lib/user/view/user_page.dart#UserPage.new","constructor","lib/user/view/user_page.dart#UserPage"],
+    ["lib/user/view/user_page.dart#UserPage.build","method","lib/user/view/user_page.dart#UserPage"],
+    ["lib/user/view/user_page.dart#UserView","classDecl","ghost:flutter:StatelessWidget"],
+    ["lib/user/view/user_page.dart#UserView.new","constructor","lib/user/view/user_page.dart#UserView"],
+    ["lib/user/view/user_page.dart#UserView.build","method","lib/user/view/user_page.dart#UserView"],
+    ["ghost:bloc:Cubit","ghostParent",null],
+    ["ghost:flutter:StatelessWidget","ghostParent",null],
+    ["pkg:bloc","externalPackage",null],
+    ["pkg:flutter","externalPackage",null],
+    ["pkg:flutter_bloc","externalPackage",null]
+  ],
+  "links": [
+    ["lib/user/cubit/user_cubit.dart#UserCubit.load","lib/user/user_repository.dart#UserRepository.fetch","call","exact",1],
+    ["lib/user/cubit/user_cubit.dart#UserCubit.load","pkg:bloc","call","external",1],
+    ["lib/user/cubit/user_cubit.dart#UserCubit.new","pkg:bloc","call","external",1],
+    ["lib/user/user_repository.dart#UserRepository.fetch","lib/user/user_repository.dart#User.new","call","exact",1],
+    ["lib/user/view/user_page.dart#UserPage.build","lib/user/cubit/user_cubit.dart#UserCubit.load","call","exact",1],
+    ["lib/user/view/user_page.dart#UserPage.build","lib/user/cubit/user_cubit.dart#UserCubit.new","call","exact",1],
+    ["lib/user/view/user_page.dart#UserPage.build","lib/user/view/user_page.dart#UserView.new","call","exact",1],
+    ["lib/user/view/user_page.dart#UserPage.build","pkg:flutter","call","external",1],
+    ["lib/user/view/user_page.dart#UserPage.build","pkg:flutter_bloc","call","external",1],
+    ["lib/user/view/user_page.dart#UserView.build","pkg:flutter","call","external",2]
+  ],
+  "loc": {
+    "lib/user/cubit/user_cubit.dart#UserCubit": 3,
+    "lib/user/cubit/user_cubit.dart#UserCubit.new": 1,
+    "lib/user/cubit/user_cubit.dart#UserCubit.load": 4,
+    "lib/user/user_repository.dart#User": 3,
+    "lib/user/user_repository.dart#User.new": 1,
+    "lib/user/user_repository.dart#UserRepository": 2,
+    "lib/user/user_repository.dart#UserRepository.fetch": 1,
+    "lib/user/view/user_page.dart#UserPage": 2,
+    "lib/user/view/user_page.dart#UserPage.new": 1,
+    "lib/user/view/user_page.dart#UserPage.build": 7,
+    "lib/user/view/user_page.dart#UserView": 2,
+    "lib/user/view/user_page.dart#UserView.new": 1,
+    "lib/user/view/user_page.dart#UserView.build": 5
+  }
+}
