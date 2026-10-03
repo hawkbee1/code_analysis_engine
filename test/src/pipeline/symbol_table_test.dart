@@ -15,10 +15,10 @@ SymbolTable _table(Map<String, String> sources) {
   );
 }
 
-String _describe(TypeLookup lookup) => switch (lookup) {
-  ProjectType(:final declaration) => 'project ${declaration.name}',
-  ExternalType(:final packageName) => 'external $packageName',
-  TypeNotFound() => 'not found',
+String _describe(SymbolLookup lookup) => switch (lookup) {
+  ProjectSymbol(:final declaration) => 'project ${declaration.name}',
+  ExternalSymbol(:final packageName) => 'external $packageName',
+  SymbolNotFound() => 'not found',
 };
 
 void main() {
@@ -55,12 +55,12 @@ void main() {
       });
     });
 
-    group('lookupType', () {
+    group('lookup', () {
       test('finds own declarations, private ones included', () {
         final table = _table({'lib/a.dart': 'class _Secret {}'});
 
         expect(
-          _describe(table.lookupType('lib/a.dart', '_Secret')),
+          _describe(table.lookup('lib/a.dart', '_Secret')),
           'project _Secret',
         );
       });
@@ -72,16 +72,16 @@ void main() {
           'lib/c.dart': 'class C {}',
         });
 
-        expect(_describe(table.lookupType('lib/a.dart', 'B')), 'project B');
+        expect(_describe(table.lookup('lib/a.dart', 'B')), 'project B');
         expect(
-          _describe(table.lookupType('lib/a.dart', 'C', prefix: 'c')),
+          _describe(table.lookup('lib/a.dart', 'C', prefix: 'c')),
           'project C',
         );
         expect(
-          _describe(table.lookupType('lib/a.dart', 'X', prefix: 'nope')),
+          _describe(table.lookup('lib/a.dart', 'X', prefix: 'nope')),
           'not found',
         );
-        expect(_describe(table.lookupType('lib/z.dart', 'B')), 'not found');
+        expect(_describe(table.lookup('lib/z.dart', 'B')), 'not found');
       });
 
       test('guesses the package of external types', () {
@@ -95,7 +95,7 @@ void main() {
         });
 
         String guess(String library, String name) =>
-            _describe(table.lookupType(library, name));
+            _describe(table.lookup(library, name));
 
         expect(guess('lib/one.dart', 'Client'), 'external http');
         expect(guess('lib/two.dart', 'Shown'), 'external b');
@@ -155,12 +155,12 @@ typedef Fn = void Function();
     test('compares lookup results by value', () {
       // Built at runtime: identical constants would skip the comparison.
       final name = ['a'].single;
-      expect(ExternalType(name), ExternalType(name));
-      expect(const TypeNotFound().props, isEmpty);
+      expect(ExternalSymbol(name), ExternalSymbol(name));
+      expect(const SymbolNotFound().props, isEmpty);
       final declaration = _table({'lib/a.dart': 'class A {}'})
           .libraries['lib/a.dart']!
           .declarations['A']!;
-      expect(ProjectType(declaration), ProjectType(declaration));
+      expect(ProjectSymbol(declaration), ProjectSymbol(declaration));
     });
   });
 }

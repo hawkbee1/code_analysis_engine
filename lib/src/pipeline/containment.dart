@@ -166,20 +166,20 @@ Containment buildContainment({
     if (superclass == null || id == null) continue;
     final name = superclass.name.lexeme;
     if (name == 'Object' && superclass.importPrefix == null) continue;
-    final lookup = symbols.lookupType(
+    final lookup = symbols.lookup(
       decl.libraryPath,
       name,
       prefix: superclass.importPrefix?.name.lexeme,
     );
     switch (lookup) {
-      case ProjectType(:final declaration):
+      case ProjectSymbol(:final declaration):
         final parentId = idsByDeclaration[declaration];
         if (declaration.kind == DeclKind.classDecl &&
             parentId != null &&
             !_createsCycle(drafts, id, parentId)) {
           drafts[id]!.parentId = parentId;
         }
-      case ExternalType(:final packageName):
+      case ExternalSymbol(:final packageName):
         if (rules.ghostParents) {
           final ghostId = 'ghost:$packageName:$name';
           ghosts[ghostId] ??= _NodeDraft(
@@ -193,7 +193,7 @@ Containment buildContainment({
         } else {
           externalSuperclasses[id] = packageName;
         }
-      case TypeNotFound():
+      case SymbolNotFound():
         break;
     }
   }

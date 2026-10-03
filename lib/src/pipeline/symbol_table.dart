@@ -125,7 +125,7 @@ class Declaration {
   /// `implements` types.
   final List<NamedType> interfaces;
 
-  /// `with` types (and a mixin's `on` types).
+  /// `with` types.
   final List<NamedType> mixins;
 
   /// Members of a type declaration.
@@ -183,13 +183,13 @@ class LibraryInfo {
   final List<ImportInfo> exports;
 }
 
-/// The result of looking up a type name.
-sealed class TypeLookup extends Equatable {
+/// The result of looking up a name (a type, function or variable).
+sealed class SymbolLookup extends Equatable {
   const new();
 }
 
-/// A type declared in the project.
-class ProjectType extends TypeLookup {
+/// A declaration of the project.
+class ProjectSymbol extends SymbolLookup {
   /// Creates the result.
   const new(this.declaration);
 
@@ -200,13 +200,13 @@ class ProjectType extends TypeLookup {
   List<Object?> get props => [declaration];
 }
 
-/// A type from outside the project; [packageName] is a best guess
+/// A name from outside the project; [packageName] is a best guess
 /// (`unknown` when several imported packages could provide it).
-class ExternalType extends TypeLookup {
+class ExternalSymbol extends SymbolLookup {
   /// Creates the result.
   const new(this.packageName);
 
-  /// The package the type most likely comes from (`dart` for the SDK).
+  /// The package the name most likely comes from (`dart` for the SDK).
   final String packageName;
 
   @override
@@ -214,7 +214,7 @@ class ExternalType extends TypeLookup {
 }
 
 /// The name is not visible (e.g. an unknown prefix).
-class TypeNotFound extends TypeLookup {
+class SymbolNotFound extends SymbolLookup {
   /// Creates the result.
   const new();
 
@@ -288,26 +288,31 @@ class SymbolTable {
     return _exportNamespaces[path] = namespace;
   }
 
-  /// Looks up the type [name] (with [prefix] for `prefix.Name`) as seen
-  /// from library [libraryPath].
-  TypeLookup lookupType(String libraryPath, String name, {String? prefix}) {
+  /// Looks up [name] (with [prefix] for `prefix.name`) as seen from library
+  /// [libraryPath]: own declarations first, then imported project libraries
+  /// (through their export namespaces), else an external guess.
+  SymbolLookup lookup(String libraryPath, String name, {String? prefix}) {
     final library = libraries[libraryPath];
-    if (library == null) return const TypeNotFound();
+    if (library == null) return const SymbolNotFound();
     if (prefix == null) {
       final own = library.declarations[name];
-      if (own != null) return ProjectType(own);
+      if (own != null) return ProjectSymbol(own);
     }
     final imports = library.imports.where((i) => i.prefix == prefix).toList();
-    if (prefix != null && imports.isEmpty) return const TypeNotFound();
+    if (prefix != null && imports.isEmpty) return const SymbolNotFound();
     for (final import in imports) {
       final target = import.target;
       if (target is ProjectLibrary && import.allows(name)) {
         final found = exportNamespace(target.path)[name];
-        if (found != null) return ProjectType(found);
+        if (found != null) return ProjectSymbol(found);
       }
     }
-    return ExternalType(_guessPackage(name, imports));
+    return ExternalSymbol(_guessPackage(name, imports));
   }
+
+  /// Whether [name] is an import prefix in library [libraryPath].
+  bool isImportPrefix(String libraryPath, String name) =>
+      libraries[libraryPath]?.imports.any((i) => i.prefix == name) ?? false;
 
   static String _guessPackage(String name, List<ImportInfo> imports) {
     final candidates = <String>{};
@@ -424,7 +429,6 @@ class SymbolTable {
           DeclKind.mixinDecl,
           node.name.lexeme,
           implementsClause: node.implementsClause,
-          mixins: node.onClause?.superclassConstraints.toList() ?? const [],
           members: _members(node.body.members),
         );
       case EnumDeclaration():
