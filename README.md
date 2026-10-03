@@ -74,6 +74,10 @@ nodes, parents, lines of code and entry node.
 `test/smoke/` analyzes the real flutter_scene submodule (tag `slow`): 622 files and 11,050
 nodes in about 1.6 s.
 
+Web check: write a small entrypoint (`tool/web_check.dart`) that analyzes a
+`MemorySnapshot`, then `dart compile js tool/web_check.dart -o /tmp/engine.js` and run it
+with Node (`node -e "globalThis.self=globalThis;self.location={href:'http://x/'};require('/tmp/engine.js')"`).
+
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
