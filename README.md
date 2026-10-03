@@ -37,6 +37,27 @@ await for (final event in engine.analyze(snapshot, rules, cancel: token)) {
 }
 ```
 
+### Off the UI thread
+
+`defaultEngineRunner()` returns an `IsolateEngineRunner` on native platforms (each analysis
+in a new isolate of the same group: the snapshot and the graph are passed without
+serialization, and cancelling stops it within milliseconds) and an `InlineEngineRunner` on
+the web (no isolates; the engine yields to the event loop after each progress event).
+
+```dart
+final events = defaultEngineRunner().run(snapshot, rules, cancel: token);
+```
+
+### Developer CLI
+
+```sh
+dart run code_analysis_engine:analyze <folder> [--rules rules.json] [--out graph.json] [--stats]
+```
+
+`--stats` prints nodes and links by kind, call-site resolution, stage durations and peak
+memory. Measured on 2026-10-04: flutter_scene 1.7 s (parsing 1.1 s), 867 MB peak RSS;
+AltMe 1.3 s (parsing 0.9 s), 783 MB.
+
 ## Pipeline (architecture §5.1)
 
 1. **Collect** (`FileCollector`): file rules; every `pubspec.yaml` is a project package

@@ -115,10 +115,15 @@ class AnalysisCancelled extends Equatable implements Exception {
 class CodeAnalysisEngine {
   /// Creates an engine; [clock] dates the result (tests fix it) and
   /// [annotators] run on the finished graph (none in the MVP).
+  ///
+  /// With [yieldToEventLoop], the engine lets the event loop run after each
+  /// progress event: the UI stays responsive when it runs on the UI thread
+  /// (web), and cancel messages reach it promptly in an isolate.
   new({
     DateTime Function()? clock,
     this.generator = defaultGenerator,
     this.annotators = const [],
+    this.yieldToEventLoop = false,
   }) : _clock = clock ?? DateTime.now;
 
   /// Generator string written in every graph.
@@ -132,6 +137,13 @@ class CodeAnalysisEngine {
 
   /// Run in order on the finished graph (future design-pattern detectors).
   final List<GraphAnnotator> annotators;
+
+  /// Whether to let the event loop run after each progress event.
+  final bool yieldToEventLoop;
+
+  Future<void> _breathe() async {
+    if (yieldToEventLoop) await Future<void>.delayed(Duration.zero);
+  }
 
   final DateTime Function() _clock;
 
@@ -163,6 +175,7 @@ class CodeAnalysisEngine {
             total: total,
             currentPath: path,
           );
+          await _breathe();
         }
         final file = ParsedFile.parse(path, await snapshot.readAsString(path));
         if (file == null) {
@@ -207,6 +220,7 @@ class CodeAnalysisEngine {
               total: libraries.length,
               currentPath: library.path,
             );
+            await _breathe();
           }
           collector.collect(library);
         }

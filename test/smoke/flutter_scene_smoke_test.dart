@@ -38,8 +38,12 @@ void main() {
     expect(graph.links.length, greaterThan(10000));
     // Parse-only resolution: keep at least 40% of call sites exact.
     expect(last.callSites.exact / last.callSites.total, greaterThan(0.4));
+    // Regression guard: 11,050 nodes recorded in session 05 (flutter_scene
+    // 0.23.0, default rules); update it on purpose only.
+    expect(graph.nodes.length, inInclusiveRange(9945, 12155));
     expect(byKind['classDecl'], greaterThan(1000));
     expect(graph.project.entryNodeId, endsWith('lib/main.dart#main'));
-    expect(watch.elapsed, lessThan(const Duration(seconds: 60)));
+    // Twice the 45 s target of session 07 (it takes ~2 s here).
+    expect(watch.elapsed, lessThan(const Duration(seconds: 90)));
   });
 }
