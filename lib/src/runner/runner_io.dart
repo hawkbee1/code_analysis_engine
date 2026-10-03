@@ -30,6 +30,7 @@ class IsolateEngineRunner implements EngineRunner {
     late final StreamController<AnalysisEvent> controller;
     SendPort? control;
     Timer? watch;
+    var finished = false;
 
     void stop() {
       watch?.cancel();
@@ -50,6 +51,7 @@ class IsolateEngineRunner implements EngineRunner {
             case AnalysisEvent():
               controller.add(message);
               if (message is AnalysisDone || message is AnalysisFailed) {
+                finished = true;
                 stop();
                 unawaited(controller.close());
               }
@@ -61,9 +63,13 @@ class IsolateEngineRunner implements EngineRunner {
           rules.toJson(),
         ), errorsAreFatal: false);
       },
+      // Also called when the stream completes normally: only a listener
+      // leaving early cancels the analysis (and the caller's token).
       onCancel: () {
-        token.cancel();
-        control?.send(_cancelMessage);
+        if (!finished) {
+          token.cancel();
+          control?.send(_cancelMessage);
+        }
         stop();
       },
     );

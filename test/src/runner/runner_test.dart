@@ -28,11 +28,15 @@ void main() {
     test('gives the same graph as the inline runner', () async {
       final snapshot = snapshotOf(_manyFiles(30));
       final rules = AnalysisRules.defaults();
+      final token = CancelToken();
 
       final inline = await InlineEngineRunner().run(snapshot, rules).last;
       final isolated = await const IsolateEngineRunner()
-          .run(snapshot, rules)
+          .run(snapshot, rules, cancel: token)
           .last;
+
+      // Finishing normally must not cancel the caller's token.
+      expect(token.isCancelled, isFalse);
 
       final a = (inline as AnalysisDone).graph;
       final b = (isolated as AnalysisDone).graph;
