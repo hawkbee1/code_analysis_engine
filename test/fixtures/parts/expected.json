@@ -1,0 +1,21 @@
+{
+  "entry": "lib/library.dart#Base",
+  "stats": {"files": 6, "parseErrors": 0, "nodes": 6, "links": 0},
+  "nodes": [
+    ["lib/library.dart#Base","classDecl",null],
+    ["lib/named.dart#N","classDecl",null],
+    ["lib/named_part.dart#NP","classDecl","lib/named.dart#N"],
+    ["lib/orphan.dart#Orphan","classDecl",null],
+    ["lib/src/a.dart#A","classDecl","lib/library.dart#Base"],
+    ["lib/src/b.dart#B","classDecl","lib/src/a.dart#A"]
+  ],
+  "links": [],
+  "loc": {
+    "lib/library.dart#Base": 1,
+    "lib/named.dart#N": 1,
+    "lib/named_part.dart#NP": 1,
+    "lib/orphan.dart#Orphan": 1,
+    "lib/src/a.dart#A": 1,
+    "lib/src/b.dart#B": 1
+  }
+}

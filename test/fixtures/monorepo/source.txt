@@ -1,0 +1,15 @@
+=== packages/core/pubspec.yaml
+name: core
+=== packages/core/lib/core.dart
+export 'src/entity.dart';
+=== packages/core/lib/src/entity.dart
+class Entity {}
+=== apps/shop/pubspec.yaml
+name: shop
+=== apps/shop/lib/main.dart
+import 'package:core/core.dart';
+import 'package:http/http.dart' as http;
+
+class Product extends Entity {}
+
+void main() {}

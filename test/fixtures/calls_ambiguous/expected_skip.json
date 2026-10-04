@@ -1,0 +1,22 @@
+{
+  "rules": {"links.ambiguous_calls":"skip"},
+  "entry": "lib/a.dart#run",
+  "stats": {"files": 1, "parseErrors": 0, "nodes": 6, "links": 0},
+  "nodes": [
+    ["lib/a.dart#A","classDecl",null],
+    ["lib/a.dart#A.save","method","lib/a.dart#A"],
+    ["lib/a.dart#A.only","method","lib/a.dart#A"],
+    ["lib/a.dart#B","classDecl",null],
+    ["lib/a.dart#B.save","method","lib/a.dart#B"],
+    ["lib/a.dart#run","function",null]
+  ],
+  "links": [],
+  "loc": {
+    "lib/a.dart#A": 2,
+    "lib/a.dart#A.save": 1,
+    "lib/a.dart#A.only": 1,
+    "lib/a.dart#B": 2,
+    "lib/a.dart#B.save": 1,
+    "lib/a.dart#run": 5
+  }
+}

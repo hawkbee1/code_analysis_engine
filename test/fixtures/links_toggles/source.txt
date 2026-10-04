@@ -1,0 +1,20 @@
+=== pubspec.yaml
+name: toggles
+=== lib/a.dart
+import 'package:http/http.dart';
+
+import 'b.dart';
+
+class A with M implements I {
+  void run() {}
+}
+
+mixin M {}
+=== lib/b.dart
+abstract class I {}
+
+class Big {
+  void m() {}
+
+  void n() {}
+}

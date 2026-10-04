@@ -1,0 +1,29 @@
+{
+  "entry": "lib/private.dart#_Secret",
+  "stats": {"files": 4, "parseErrors": 0, "nodes": 10, "links": 0},
+  "nodes": [
+    ["lib/a.dart#A","classDecl",null],
+    ["lib/b.freezed.dart#BFrozen","classDecl",null],
+    ["lib/generated/z.dart#Z","classDecl",null],
+    ["lib/private.dart#_Secret","classDecl",null],
+    ["lib/private.dart#_Secret._hidden","method","lib/private.dart#_Secret"],
+    ["lib/private.dart#_Secret.shown","method","lib/private.dart#_Secret"],
+    ["lib/private.dart#Visible","classDecl",null],
+    ["lib/private.dart#Visible.new","constructor","lib/private.dart#Visible"],
+    ["lib/private.dart#Visible._private","method","lib/private.dart#Visible"],
+    ["lib/private.dart#Visible.value","getter","lib/private.dart#Visible"]
+  ],
+  "links": [],
+  "loc": {
+    "lib/a.dart#A": 1,
+    "lib/b.freezed.dart#BFrozen": 1,
+    "lib/generated/z.dart#Z": 1,
+    "lib/private.dart#_Secret": 2,
+    "lib/private.dart#_Secret._hidden": 1,
+    "lib/private.dart#_Secret.shown": 1,
+    "lib/private.dart#Visible": 2,
+    "lib/private.dart#Visible.new": 1,
+    "lib/private.dart#Visible._private": 1,
+    "lib/private.dart#Visible.value": 1
+  }
+}

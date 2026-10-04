@@ -10,6 +10,8 @@ environment:
 dependencies:
   # Only the parser (parseString) and the AST: they compile to JS and Wasm.
   analyzer: ^13.0.0
+  # Command line parsing of the developer CLI (bin/analyze.dart).
+  args: ^2.5.0
   code_graph:
     path: ../code_graph
   code_source_client:

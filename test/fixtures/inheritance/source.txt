@@ -1,0 +1,45 @@
+=== pubspec.yaml
+name: shapes
+=== lib/shapes.dart
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
+abstract class Shape {
+  double area();
+}
+
+class Rectangle extends Shape {
+  @override
+  double area() => 2;
+}
+
+class Square extends Rectangle {}
+
+class Circle extends Shape with Named implements Comparable<Circle> {
+  @override
+  int compareTo(Circle other) => 0;
+}
+
+mixin Named {}
+
+class ShapeView extends StatelessWidget {
+  const ShapeView({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SizedBox();
+}
+
+class Point extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class Loop1 extends Loop2 {}
+
+class Loop2 extends Loop1 {}
+
+class Plain extends Object {}
+
+class Mixed = Shape with Named;
+
+class Unknown extends p.Missing {}

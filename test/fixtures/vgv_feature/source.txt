@@ -1,0 +1,55 @@
+=== pubspec.yaml
+name: vgv
+=== lib/user/user_repository.dart
+class User {
+  const User(this.name);
+
+  final String name;
+}
+
+class UserRepository {
+  Future<User> fetch(String id) async => User(id);
+}
+=== lib/user/cubit/user_cubit.dart
+import 'package:bloc/bloc.dart';
+
+import '../user_repository.dart';
+
+class UserCubit extends Cubit<User?> {
+  UserCubit(this._repository) : super(null);
+
+  final UserRepository _repository;
+
+  Future<void> load(String id) async {
+    final user = await _repository.fetch(id);
+    emit(user);
+  }
+}
+=== lib/user/view/user_page.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/user_cubit.dart';
+import '../user_repository.dart';
+
+class UserPage extends StatelessWidget {
+  const UserPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => UserCubit(context.read<UserRepository>())..load('1'),
+      child: const UserView(),
+    );
+  }
+}
+
+class UserView extends StatelessWidget {
+  const UserView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final name = context.select((UserCubit cubit) => cubit.state?.name);
+    return Text(name ?? '');
+  }
+}

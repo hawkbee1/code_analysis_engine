@@ -1,0 +1,51 @@
+{
+  "entry": "lib/kinds.dart#Color",
+  "stats": {"files": 1, "parseErrors": 0, "nodes": 20, "links": 1},
+  "nodes": [
+    ["lib/kinds.dart#Color","enumDecl",null],
+    ["lib/kinds.dart#Color.paint","method","lib/kinds.dart#Color"],
+    ["lib/kinds.dart#extension@7","extensionDecl",null],
+    ["lib/kinds.dart#extension@7.twice","getter","lib/kinds.dart#extension@7"],
+    ["lib/kinds.dart#Named","extensionDecl",null],
+    ["lib/kinds.dart#Named.hello","method","lib/kinds.dart#Named"],
+    ["lib/kinds.dart#Meters","extensionTypeDecl",null],
+    ["lib/kinds.dart#Meters.new","constructor","lib/kinds.dart#Meters"],
+    ["lib/kinds.dart#Meters.zero","constructor","lib/kinds.dart#Meters"],
+    ["lib/kinds.dart#Walker","mixinDecl",null],
+    ["lib/kinds.dart#Walker.walk","method","lib/kinds.dart#Walker"],
+    ["lib/kinds.dart#topGetter","getter",null],
+    ["lib/kinds.dart#topSetter=","setter",null],
+    ["lib/kinds.dart#Point","classDecl",null],
+    ["lib/kinds.dart#Point.new","constructor","lib/kinds.dart#Point"],
+    ["lib/kinds.dart#Point.sum","getter","lib/kinds.dart#Point"],
+    ["lib/kinds.dart#Modern","classDecl",null],
+    ["lib/kinds.dart#Modern.new","constructor","lib/kinds.dart#Modern"],
+    ["lib/kinds.dart#Modern.named","constructor","lib/kinds.dart#Modern"],
+    ["lib/kinds.dart#Modern.+","method","lib/kinds.dart#Modern"]
+  ],
+  "links": [
+    ["lib/kinds.dart#Meters.zero","lib/kinds.dart#Meters.new","call","exact",1]
+  ],
+  "loc": {
+    "lib/kinds.dart#Color": 3,
+    "lib/kinds.dart#Color.paint": 1,
+    "lib/kinds.dart#extension@7": 2,
+    "lib/kinds.dart#extension@7.twice": 1,
+    "lib/kinds.dart#Named": 2,
+    "lib/kinds.dart#Named.hello": 1,
+    "lib/kinds.dart#Meters": 2,
+    "lib/kinds.dart#Meters.new": 1,
+    "lib/kinds.dart#Meters.zero": 1,
+    "lib/kinds.dart#Walker": 2,
+    "lib/kinds.dart#Walker.walk": 1,
+    "lib/kinds.dart#topGetter": 1,
+    "lib/kinds.dart#topSetter=": 1,
+    "lib/kinds.dart#Point": 2,
+    "lib/kinds.dart#Point.new": 1,
+    "lib/kinds.dart#Point.sum": 1,
+    "lib/kinds.dart#Modern": 2,
+    "lib/kinds.dart#Modern.new": 1,
+    "lib/kinds.dart#Modern.named": 1,
+    "lib/kinds.dart#Modern.+": 1
+  }
+}

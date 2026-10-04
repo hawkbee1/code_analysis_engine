@@ -1,0 +1,31 @@
+=== pubspec.yaml
+name: f
+=== lib/a.dart
+class A {}
+=== lib/a.g.dart
+class AGenerated {}
+=== lib/b.freezed.dart
+class BFrozen {}
+=== lib/a_test.dart
+class ATestLike {}
+=== test/a_test.dart
+void main() {}
+=== integration_test/app_test.dart
+void main() {}
+=== build/x.dart
+class Built {}
+=== .dart_tool/y.dart
+class Tool {}
+=== lib/generated/z.dart
+class Z {}
+=== lib/private.dart
+class _Secret {
+  void _hidden() {}
+  void shown() {}
+}
+
+class Visible {
+  Visible();
+  void _private() {}
+  int get value => 1;
+}

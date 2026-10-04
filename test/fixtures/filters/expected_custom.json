@@ -1,0 +1,14 @@
+{
+  "rules": {"files.generated_patterns":["**/*.g.dart","**/*.freezed.dart"],"files.extra_excludes":["lib/generated/**"],"nodes.private":false,"nodes.member_kinds":["method"]},
+  "entry": "lib/private.dart#Visible",
+  "stats": {"files": 2, "parseErrors": 0, "nodes": 2, "links": 0},
+  "nodes": [
+    ["lib/a.dart#A","classDecl",null],
+    ["lib/private.dart#Visible","classDecl",null]
+  ],
+  "links": [],
+  "loc": {
+    "lib/a.dart#A": 1,
+    "lib/private.dart#Visible": 5
+  }
+}

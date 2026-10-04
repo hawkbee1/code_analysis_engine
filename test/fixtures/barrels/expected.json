@@ -1,0 +1,25 @@
+{
+  "entry": "lib/src/deeper.dart#Deep",
+  "stats": {"files": 6, "parseErrors": 0, "nodes": 8, "links": 0},
+  "nodes": [
+    ["lib/feature.dart#Admin","classDecl","lib/src/models.dart#User"],
+    ["lib/feature.dart#CachedRepository","classDecl","lib/src/repository.dart#UserRepository"],
+    ["lib/feature.dart#DeepUser","classDecl","lib/src/deeper.dart#Deep"],
+    ["lib/src/deeper.dart#Deep","classDecl",null],
+    ["lib/src/models.dart#User","classDecl",null],
+    ["lib/src/models.dart#Hidden","classDecl",null],
+    ["lib/src/repository.dart#UserRepository","classDecl",null],
+    ["lib/src/repository.dart#InternalThing","classDecl",null]
+  ],
+  "links": [],
+  "loc": {
+    "lib/feature.dart#Admin": 1,
+    "lib/feature.dart#CachedRepository": 1,
+    "lib/feature.dart#DeepUser": 1,
+    "lib/src/deeper.dart#Deep": 1,
+    "lib/src/models.dart#User": 1,
+    "lib/src/models.dart#Hidden": 1,
+    "lib/src/repository.dart#UserRepository": 1,
+    "lib/src/repository.dart#InternalThing": 1
+  }
+}

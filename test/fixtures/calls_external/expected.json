@@ -1,0 +1,24 @@
+{
+  "entry": "lib/a.dart#go",
+  "stats": {"files": 1, "parseErrors": 0, "nodes": 7, "links": 3},
+  "nodes": [
+    ["lib/a.dart#Counter","classDecl","ghost:bloc:Cubit"],
+    ["lib/a.dart#Counter.new","constructor","lib/a.dart#Counter"],
+    ["lib/a.dart#Counter.increment","method","lib/a.dart#Counter"],
+    ["lib/a.dart#go","function",null],
+    ["ghost:bloc:Cubit","ghostParent",null],
+    ["pkg:bloc","externalPackage",null],
+    ["pkg:http","externalPackage",null]
+  ],
+  "links": [
+    ["lib/a.dart#Counter.increment","pkg:bloc","call","external",1],
+    ["lib/a.dart#Counter.new","pkg:bloc","call","external",1],
+    ["lib/a.dart#go","pkg:http","call","external",2]
+  ],
+  "loc": {
+    "lib/a.dart#Counter": 2,
+    "lib/a.dart#Counter.new": 1,
+    "lib/a.dart#Counter.increment": 1,
+    "lib/a.dart#go": 5
+  }
+}
